@@ -30,6 +30,15 @@ export default class Book extends BaseModel {
   @column()
   public pages: number;
 
+  @column()
+  public cover: string;
+
+  @column({
+    prepare: (value: string[]): string => `{${value.join(',')}}`,
+    consume: (value: string): string[] => value.slice(1, -1).split(','),
+  })
+  public category: string[];
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

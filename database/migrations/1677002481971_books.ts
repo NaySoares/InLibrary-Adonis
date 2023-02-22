@@ -14,6 +14,8 @@ export default class extends BaseSchema {
       table.string('publisher');
       table.date('published_date');
       table.decimal('pages');
+      table.string('cover');
+      table.specificType('category', 'string[]');
       table.timestamp('created_at', { useTz: true });
       table.timestamp('updated_at', { useTz: true });
     });
