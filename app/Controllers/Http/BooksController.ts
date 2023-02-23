@@ -54,9 +54,46 @@ export default class BooksController {
     return book;
   }
 
-  public async edit({}: HttpContextContract) {}
+  // ! Deprecated method, use update method instead
+  public async edit() {}
 
-  public async update({}: HttpContextContract) {}
+  public async update({ request, response }: HttpContextContract) {
+    const { id } = request.params();
+    const {
+      title,
+      author,
+      description,
+      isbn,
+      isbn13,
+      publisher,
+      publishedDate,
+      pages,
+    } = request.body();
 
-  public async destroy({}: HttpContextContract) {}
+    const bookData = await Book.findOrFail(id);
+
+    bookData.title = title || bookData.title;
+    bookData.author = author || bookData.author;
+    bookData.description = description || bookData.description;
+    bookData.isbn = isbn || bookData.isbn;
+    bookData.isbn13 = isbn13 || bookData.isbn13;
+    bookData.publisher = publisher || bookData.publisher;
+    bookData.published_date = publishedDate || bookData.published_date;
+    bookData.pages = pages || bookData.pages;
+
+    await bookData.save();
+
+    return response.status(201).json(bookData);
+  }
+
+  // todo - [] this method deletes a book from the database, but it should only delete from the user's collection
+  // ! user's collection not implemented yet
+  public async destroy({ request, response }: HttpContextContract) {
+    const { id } = request.params();
+
+    const book = await Book.findOrFail(id);
+    await book.delete();
+
+    return response.status(200).json({ message: 'Book deleted' });
+  }
 }
