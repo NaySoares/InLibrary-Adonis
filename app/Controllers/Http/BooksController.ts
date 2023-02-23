@@ -24,7 +24,7 @@ export default class BooksController {
 
     const bookExists = await Book.findBy('isbn', isbn);
 
-    // * Not allowed duplicate books.
+    // * Not allowed duplicate books
     if (bookExists) {
       return response.status(401).json({ message: 'Book already exists' });
     }
